@@ -1,0 +1,21 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
+    title #{title}
+    meta(content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0', name='viewport')
+    meta(name='viewport', content='width=device-width')
+    include partials/styles
+    block styles
+  body.bg-dark.text-white.py-5
+    .container.py-5
+      .row
+        .col-md-2.text-center
+          p
+            i.fa.fa-exclamation-triangle.fa-5x
+            br
+            | Status Code: 404
+        .col-md-10
+          h3 Oops! File not Found
+  include partials/scripts
