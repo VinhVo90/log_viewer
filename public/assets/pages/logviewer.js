@@ -20,7 +20,12 @@ window.app = new Vue({
       
       axios.post('/logviewer/get-log-data', {}).then((response) => {
         this.waiting = false;
-        this.logData = response.data;
+        let data = response.data;
+        if (data.length > 0) {
+          data = _.orderBy(data, [ function (item) { return moment(item.timestamp, 'YYYY-MM-DDTHH:mm:ss.SSSZ').valueOf(); }], ["desc"]);
+        }
+
+        this.logData = data;
       });
 
       setTimeout(() => {

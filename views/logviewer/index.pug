@@ -28,6 +28,8 @@ block content
                   input#emitterIdText.form-control(type='text' placeholder='Emitter Id', v-model='searchData.emitterId')
                   //class=activePage=="search" ? "active" : ""
       .col-10.border.rounded.pt-2.mb-2.data-section.d-none
+        .text-nowrap.text-center(v-if="logData.length == 0")
+          | There is no data
         .card.text-white.mb-3(v-for="(item, idx) in logData" v-bind:class="classObject(item)")
           .card-body
             p.card-text Log Level : {{item.log_level}}
