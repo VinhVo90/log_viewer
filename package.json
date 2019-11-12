@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --inspect app.js"
+    "dev": "nodemon --inspect app.js",
+    "eslint": "eslint ./"
   },
   "author": "",
   "license": "ISC",
@@ -44,6 +45,7 @@
     "@babel/core": "^7.6.0",
     "@babel/register": "^7.6.0",
     "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.18.2"
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-vue": "^6.0.0"
   }
 }

@@ -4,7 +4,7 @@ const Sequelize = require('sequelize-oracle');
 const dbConfig = require('../configs/db.js');
 
 const NODE_ENV = process.env.NODE_ENV || 'developement';
-if (NODE_ENV == 'developement') {
+if (NODE_ENV === 'developement') {
   dotenv.config({ path: path.join(__dirname, '..', '.env') });
 }
 

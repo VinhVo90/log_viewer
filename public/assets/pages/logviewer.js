@@ -1,8 +1,3 @@
-
-const DATE_FORMAT = 'YYYY.MM.DD';
-Vue.component('v-select', VueSelect.VueSelect);
-Vue.component('datepicker', vuejsDatepicker);
-
 window.app = new Vue({
   el: '#app',
   data() {
@@ -31,7 +26,6 @@ window.app = new Vue({
   },
 
   methods: {
-
     onBtnSearchClick() {
       $('.data-section').removeClass('d-none');
       this.waiting = true;
@@ -90,11 +84,11 @@ window.app = new Vue({
 
     classObject(item) {
       return {
-        'bg-primary': item.log_level == 'DEBUG',
-        'bg-success': item.log_level == 'INFO',
-        'bg-warning': item.log_level == 'WARN',
-        'bg-danger': item.log_level == 'ERROR',
-        'bg-dark': item.log_level == 'FATAL',
+        'bg-primary': item.log_level === 'DEBUG',
+        'bg-success': item.log_level === 'INFO',
+        'bg-warning': item.log_level === 'WARN',
+        'bg-danger': item.log_level === 'ERROR',
+        'bg-dark': item.log_level === 'FATAL',
       };
     },
   },
