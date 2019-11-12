@@ -10,4 +10,8 @@ router.get('/logviewer', async (ctx) => {
   await LogViewerController.getIndex(ctx);
 });
 
+router.post('/logviewer/get-log-data', async (ctx) => {
+  await LogViewerController.getLogData(ctx);
+});
+
 module.exports = router;
