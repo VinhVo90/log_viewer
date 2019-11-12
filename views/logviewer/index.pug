@@ -32,6 +32,6 @@ block content
           .card-body
             p.card-text Log Level : {{item.log_level}}
             p.card-text Process Code : {{item.process_code}}
-            p.card-text Log Message : {{JSON.parse(item.message).value}}
+            p.card-text Log Message : {{item.message}}
             
 block scripts
