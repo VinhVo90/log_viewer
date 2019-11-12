@@ -2,10 +2,6 @@ extends ../layout
 
 block styles
   style(type='text/css').
-    div.recipientModal {
-      width: 900px;
-      max-width: 900px;
-    }
 
 block content
   include ../partials/spinner
@@ -26,7 +22,6 @@ block content
                 .form-group.col-md-6
                   label(for='emitterIdText') Emitter Id
                   input#emitterIdText.form-control(type='text' placeholder='Emitter Id', v-model='searchData.emitterId')
-                  //class=activePage=="search" ? "active" : ""
       .col-10.border.rounded.pt-2.mb-2.data-section.d-none
         .text-nowrap.text-center(v-if="logData.length == 0")
           | There is no data
