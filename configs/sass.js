@@ -1,4 +1,5 @@
 const path = require('path');
+const sassMiddleware = require('node-sass-middleware');
 
 const sassOpts = {
   src: path.resolve(__dirname, '..', 'sass'),
@@ -8,7 +9,7 @@ const sassOpts = {
 };
 
 function nodesass(options) {
-  const sass = require('node-sass-middleware')(options);
+  const sass = sassMiddleware(options);
   return (ctx, next) => new Promise((resolve, reject) => {
     sass.call(sass, ctx.req, ctx.res, (err) => {
       if (err) {

@@ -6,7 +6,14 @@ module.exports = {
   "extends": ["airbnb-base", "plugin:vue/essential"],
   "globals": {
     "Atomics": "readonly",
-    "SharedArrayBuffer": "readonly"
+    "SharedArrayBuffer": "readonly",
+    "$": "readonly",
+    "Vue": "readonly",
+    "VueSelect": "readonly",
+    "vuejsDatepicker": "readonly",
+    "_": "readonly",
+    "axios": "readonly",
+    "moment": "readonly"
   },
   "parserOptions": {
     "ecmaVersion": 2018,

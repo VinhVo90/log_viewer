@@ -9,9 +9,9 @@ const getIndex = async (ctx) => {
 
 const getLogData = async (ctx) => {
   await LogViewerService.getLogData(ctx);
-}
+};
 
 module.exports = {
   getIndex,
-  getLogData
+  getLogData,
 };

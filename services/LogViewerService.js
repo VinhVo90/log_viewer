@@ -8,12 +8,12 @@ const getLogData = async (ctx) => {
     })
     .catch((error) => {
       ctx.body = {
-        error : error.response.status,
-        data : error.response.data
+        error: error.response.status,
+        data: error.response.data,
       };
     });
-}
+};
 
 module.exports = {
-  getLogData
-}
+  getLogData,
+};

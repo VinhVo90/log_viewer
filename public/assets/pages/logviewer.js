@@ -5,7 +5,7 @@ window.app = new Vue({
       waiting: false,
       searchData: {
         processId: '',
-        emitterId: ''
+        emitterId: '',
       },
       logData: [],
     };
@@ -17,12 +17,12 @@ window.app = new Vue({
     onBtnSearchClick() {
       $('.data-section').removeClass('d-none');
       this.waiting = true;
-      
+
       axios.post('/logviewer/get-log-data', {}).then((response) => {
         this.waiting = false;
-        let data = response.data;
+        let { data } = response;
         if (data.length > 0) {
-          data = _.orderBy(data, [ function (item) { return moment(item.timestamp, 'YYYY-MM-DDTHH:mm:ss.SSSZ').valueOf(); }], ["desc"]);
+          data = _.orderBy(data, [function (item) { return moment(item.timestamp, 'YYYY-MM-DDTHH:mm:ss.SSSZ').valueOf(); }], ['desc']);
         }
 
         this.logData = data;

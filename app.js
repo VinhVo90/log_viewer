@@ -20,8 +20,9 @@ app.use(async (ctx, next) => {
   if (ctx.request.path.indexOf('assets') < 0) {
     const segments = ctx.request.path.split('/');
     console.log('Segments...', segments);
+    const pageIndex = 1;
     if (segments.length > 1) {
-      ctx.state.activePage = segments[1];
+      ctx.state.activePage = segments[pageIndex];
     } else {
       ctx.state.activePage = '';
     }
@@ -30,11 +31,13 @@ app.use(async (ctx, next) => {
   await next();
 });
 
-new Pug({
-  viewPath: path.resolve(__dirname, './views'),
-  basedir: path.resolve(__dirname, './views'),
-  app,
-});
+(
+  () => new Pug({
+    viewPath: path.resolve(__dirname, './views'),
+    basedir: path.resolve(__dirname, './views'),
+    app,
+  })
+)();
 
 app.use(sass);
 app.use(koastatic(`${__dirname}/public`));
