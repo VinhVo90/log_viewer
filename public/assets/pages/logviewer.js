@@ -13,6 +13,7 @@ window.app = new Vue({
         startTimeStamp: '',
         endTimeStamp: '',
         selectLogLevel: [],
+        selectSearchOrder: [],
         timeStampOrder: '',
         limit: null,
         offset: null,
@@ -24,6 +25,9 @@ window.app = new Vue({
         { code: 'info', label: 'INFO' },
         { code: 'error', label: 'ERROR' },
         { code: 'fatal', label: 'FATAL' },
+      ],
+      searchOrderArr: [
+        { code: 'timestamp', label: 'Time Stamp' },
       ],
     };
   },
@@ -62,7 +66,7 @@ window.app = new Vue({
     createRequestParam() {
       const {
         processId, emitterId, startTimeStamp, endTimeStamp,
-        selectLogLevel, timeStampOrder, limit, offset,
+        selectLogLevel, selectSearchOrder, limit, offset,
       } = this.searchData;
       const data = {};
       const arrQuery = [];
@@ -81,6 +85,7 @@ window.app = new Vue({
       }
 
       const arrLogLevel = _.map(selectLogLevel, (item) => `log_level = '${item.code}'`);
+      const arrLogSearchOrder = _.map(selectSearchOrder, (item) => `orderBy=${item.code}`);
 
       if (arrLogLevel.length > 0) {
         arrFilter.push(arrLogLevel.join(' and '));
@@ -90,8 +95,8 @@ window.app = new Vue({
         arrQuery.push(arrFilter.join(' and '));
       }
 
-      if (timeStampOrder !== '') {
-        arrQuery.push(`orderBy=timestamp ${timeStampOrder}`);
+      if (arrLogSearchOrder.length > 0) {
+        arrQuery.push(arrLogSearchOrder.join('&'));
       }
 
       if (limit !== '' && limit !== null) {
@@ -117,14 +122,20 @@ window.app = new Vue({
         locale: {
           format: self.momentDateFormat,
         },
-      }, (start, end) => {
+      }, (startDate, endDate) => {
+        const start = self.convertToUTCTime(startDate);
+        const end = self.convertToUTCTime(endDate);
         self.searchData.startTimeStamp = start.format(self.momentDateFormat);
         self.searchData.endTimeStamp = end.format(self.momentDateFormat);
         $('#logTimeStamp').val(`${start.format(self.momentDateFormat)} - ${end.format(self.momentDateFormat)}`);
       });
 
       $('#logTimeStamp').on('apply.daterangepicker', function (ev, picker) {
-        $(this).val(`${picker.startDate.format(self.momentDateFormat)} - ${picker.endDate.format(self.momentDateFormat)}`);
+        const start = self.convertToUTCTime(picker.startDate);
+        const end = self.convertToUTCTime(picker.endDate);
+        self.searchData.startTimeStamp = start.format(self.momentDateFormat);
+        self.searchData.endTimeStamp = end.format(self.momentDateFormat);
+        $(this).val(`${start.format(self.momentDateFormat)} - ${end.format(self.momentDateFormat)}`);
       });
 
       $('#logTimeStamp').on('cancel.daterangepicker', function () {
@@ -149,6 +160,10 @@ window.app = new Vue({
           },
         },
       });
+    },
+
+    convertToUTCTime(date) {
+      return moment(date.valueOf() + (new Date()).getTimezoneOffset() * 60000);
     },
   },
 });

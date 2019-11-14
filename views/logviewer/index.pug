@@ -36,24 +36,19 @@ block content
               .form-row
                 .form-group.col-md-6
                   label(for='processIdText') Order By
-                    span
-                      | &nbsp Time Stamp &nbsp
-                    .custom-control.custom-radio.custom-control-inline
-                      input#customRadio1.custom-control-input(type='radio' name='customRadio' value="asc" v-model="searchData.timeStampOrder")
-                      label.custom-control-label(for='customRadio1') Asc
-                    .custom-control.custom-radio.custom-control-inline
-                      input#customRadio2.custom-control-input(type='radio' name='customRadio' value="desc" v-model="searchData.timeStampOrder")
-                      label.custom-control-label(for='customRadio2') Desc
+                  v-select(:id="'searchOrderOptions'" v-model='searchData.selectSearchOrder' :options='searchOrderArr' :multiple='true' :reduce='item => item.code' label='label' :close-on-select='false')
                 .form-group.col-md-6
                   label(for='processIdText') Record Range
+                  div
                     span
-                      | &nbsp From &nbsp
-                    .custom-control-inline
-                      input#inlineFormInputName2.form-control(type='number' v-model="searchData.limit")
-                    span
-                      | To &nbsp
+                      | Offset &nbsp
                     .custom-control-inline
                       input#inlineFormInputName2.form-control(type='number' v-model="searchData.offset")
+                    span
+                      | Limit &nbsp
+                    .custom-control-inline
+                      input#inlineFormInputName2.form-control(type='number' v-model="searchData.limit")
+                    
       .col-10.border.rounded.pt-2.mb-2.data-section.d-none
         .text-nowrap.text-center(v-if="logData.length == 0")
           | There is no data
