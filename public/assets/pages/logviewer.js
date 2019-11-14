@@ -158,6 +158,14 @@ window.app = new Vue({
           emitterIdText: {
             onlyOne: ['#processIdText'],
           },
+          offsetInputText: {
+            min: 1,
+            number: true,
+          },
+          limitInputText: {
+            min: 1,
+            number: true,
+          },
         },
       });
     },

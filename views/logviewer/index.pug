@@ -41,13 +41,13 @@ block content
                   label(for='processIdText') Record Range
                   div
                     span
-                      | Offset &nbsp
+                      | From &nbsp
                     .custom-control-inline
-                      input#inlineFormInputName2.form-control(type='number' v-model="searchData.offset")
+                      input.form-control(type='number' name="offsetInputText" v-model="searchData.offset")
                     span
-                      | Limit &nbsp
+                      | Length &nbsp
                     .custom-control-inline
-                      input#inlineFormInputName2.form-control(type='number' v-model="searchData.limit")
+                      input.form-control(type='number' name="limitInputText" v-model="searchData.limit")
                     
       .col-10.border.rounded.pt-2.mb-2.data-section.d-none
         .text-nowrap.text-center(v-if="logData.length == 0")
