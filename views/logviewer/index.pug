@@ -14,14 +14,46 @@ block content
               button.btn.btn-primary(type='button' data-toggle='button' aria-pressed='false' autocomplete='off', @click="onBtnSearchClick") Search
         .row
           .col-12
-            form
+            form#logSearchForm
               .form-row
                 .form-group.col-md-6
                   label(for='processIdText') Process Id
-                  input#processIdText.form-control(type='text' placeholder='Process Id', v-model='searchData.processId')
+                  input#processIdText.form-control(type='text' name='processIdText' placeholder='Process Id', v-model='searchData.processId')
                 .form-group.col-md-6
                   label(for='emitterIdText') Emitter Id
-                  input#emitterIdText.form-control(type='text' placeholder='Emitter Id', v-model='searchData.emitterId')
+                  input#emitterIdText.form-control(type='text' name='emitterIdText' placeholder='Emitter Id', v-model='searchData.emitterId')
+              .form-row
+                .form-group.col-md-6
+                  label Time Range
+                  .input-group
+                    .input-group-prepend
+                      span.input-group-text
+                        i.fa.fa-calendar
+                    input#logTimeStamp.form-control.float-right(type='text', maxLength='46', readonly, style="background : white")
+                .form-group.col-md-6
+                  label(for='logLevelOptions') Log Level
+                  v-select(:id="'logLevelOptions'" v-model='searchData.selectLogLevel' :options='logLevelArr' :multiple='true' :reduce='item => item.code' label='label' :close-on-select='false')
+              .form-row
+                .form-group.col-md-6
+                  label(for='processIdText') Order By
+                    span
+                      | &nbsp Time Stamp &nbsp
+                    .custom-control.custom-radio.custom-control-inline
+                      input#customRadio1.custom-control-input(type='radio' name='customRadio' value="asc" v-model="searchData.timeStampOrder")
+                      label.custom-control-label(for='customRadio1') Asc
+                    .custom-control.custom-radio.custom-control-inline
+                      input#customRadio2.custom-control-input(type='radio' name='customRadio' value="desc" v-model="searchData.timeStampOrder")
+                      label.custom-control-label(for='customRadio2') Desc
+                .form-group.col-md-6
+                  label(for='processIdText') Record Range
+                    span
+                      | &nbsp From &nbsp
+                    .custom-control-inline
+                      input#inlineFormInputName2.form-control(type='number' v-model="searchData.limit")
+                    span
+                      | To &nbsp
+                    .custom-control-inline
+                      input#inlineFormInputName2.form-control(type='number' v-model="searchData.offset")
       .col-10.border.rounded.pt-2.mb-2.data-section.d-none
         .text-nowrap.text-center(v-if="logData.length == 0")
           | There is no data
