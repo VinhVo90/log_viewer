@@ -158,20 +158,22 @@ window.app = new Vue({
           emitterIdText: {
             onlyOne: ['#processIdText'],
           },
-          offsetInputText: {
-            min: 1,
-            number: true,
-          },
-          limitInputText: {
-            min: 1,
-            number: true,
-          },
         },
       });
     },
 
     convertToUTCTime(date) {
       return moment(date.valueOf() + (new Date()).getTimezoneOffset() * 60000);
+    },
+
+    validateNumber(event, field) {
+      const inputText = event.target.value;
+      if (inputText === '') {
+        this.searchData[field] = null;
+      }
+      if (inputText === '00') {
+        this.searchData[field] = 0;
+      }
     },
   },
 });
