@@ -9,9 +9,13 @@ const getLogData = async (ctx) => {
   let url = '';
 
   if (searchProcess) {
-    url = `${CONSTANT.API_SERVER}/logs/processes/${processId}?${querystring}`;
+    url = `${CONSTANT.API_SERVER}/logs/processes/${processId}`;
   } else {
-    url = `${CONSTANT.API_SERVER}/logs/emitters/${emitterId}?${querystring}`;
+    url = `${CONSTANT.API_SERVER}/logs/emitters/${emitterId}`;
+  }
+
+  if (querystring !== '') {
+    url = `${url}?${querystring}`;
   }
 
   await axios.get(url)

@@ -10,8 +10,8 @@ window.app = new Vue({
       searchData: {
         processId: '',
         emitterId: '',
-        startTimeStamp: '',
-        endTimeStamp: '',
+        startTimeStamp: null,
+        endTimeStamp: null,
         selectLogLevel: [],
         selectSearchOrder: [],
         timeStampOrder: '',
@@ -80,8 +80,8 @@ window.app = new Vue({
         data.emitterId = emitterId;
       }
 
-      if (startTimeStamp !== '') {
-        arrFilter.push(`filter=timestamp between '${startTimeStamp}' and '${endTimeStamp}'`);
+      if (startTimeStamp !== null) {
+        arrFilter.push(`timestamp between '${startTimeStamp}' and '${endTimeStamp}'`);
       }
 
       const arrLogLevel = _.map(selectLogLevel, (item) => `log_level = '${item.code}'`);
@@ -92,7 +92,7 @@ window.app = new Vue({
       }
 
       if (arrFilter.length > 0) {
-        arrQuery.push(arrFilter.join(' and '));
+        arrQuery.push(`filter=${arrFilter.join(' and ')}`);
       }
 
       if (arrLogSearchOrder.length > 0) {
