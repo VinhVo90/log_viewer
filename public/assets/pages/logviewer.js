@@ -27,7 +27,7 @@ window.app = new Vue({
         { code: 'warn', label: 'WARNING' },
         { code: 'info', label: 'INFO' },
         { code: 'error', label: 'ERROR' },
-        { code: 'fatal', label: 'FATAL' },
+        { code: 'fail', label: 'FAIL' },
       ],
       timeZoneArr: [
         { code: 0, label: 'UTC, GMT' },
@@ -103,7 +103,7 @@ window.app = new Vue({
         'bg-success': item.log_level === 'info',
         'bg-warning': item.log_level === 'warn',
         'bg-danger': item.log_level === 'error',
-        'bg-dark': item.log_level === 'fatal',
+        'bg-dark': item.log_level === 'fail',
       };
     },
 
