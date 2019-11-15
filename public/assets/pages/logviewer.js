@@ -77,6 +77,7 @@ window.app = new Vue({
       if ($('#logSearchForm').valid()) {
         $('.data-section').removeClass('d-none');
         this.waiting = true;
+        this.createDateParam();
         const data = this.createRequestParam();
         axios.post('/logviewer/get-log-data', data).then((response) => {
           this.waiting = false;
@@ -87,14 +88,6 @@ window.app = new Vue({
       setTimeout(() => {
         this.waiting = false;
       }, 30000);
-    },
-
-    onUpdateUTCTime() {
-      const start = this.convertToUTCTime(this.searchData.startDate);
-      const end = this.convertToUTCTime(this.searchData.endDate);
-      this.searchData.startTimeStamp = start.format(this.momentDateFormat);
-      this.searchData.endTimeStamp = end.format(this.momentDateFormat);
-      $('#logTimeStamp').val(`${start.format(this.momentDateFormat)} - ${end.format(this.momentDateFormat)}`);
     },
 
     classObject(item) {
@@ -124,9 +117,7 @@ window.app = new Vue({
         data.emitterId = emitterId;
       }
 
-      if (startTimeStamp !== null) {
-        arrFilter.push(`timestamp between '${startTimeStamp}' and '${endTimeStamp}'`);
-      }
+      arrFilter.push(`timestamp between '${startTimeStamp}' and '${endTimeStamp}'`);
 
       const arrLogLevel = _.map(selectLogLevel, (item) => `log_level = '${item.code}'`);
       const arrLogSearchOrder = _.map(selectSearchOrder, (item) => `orderBy=${item.code}`);
@@ -157,11 +148,15 @@ window.app = new Vue({
 
     initTimeEvent() {
       const self = this;
-      const fromDate = moment(new Date());
-      const toDate = fromDate.clone().subtract(1, 'day');
+      const timeZoneLocale = (-1) * ((new Date()).getTimezoneOffset() / 60);
+      self.searchData.selectTimeZone = _.find(self.timeZoneArr,
+        (timeZone) => timeZone.code === timeZoneLocale);
+
+      const toDate = moment(new Date());
+      const fromDate = toDate.clone().subtract(1, 'day');
       self.searchData.startDate = fromDate;
       self.searchData.endDate = toDate;
-      self.onUpdateUTCTime();
+      $('#logTimeStamp').val(`${fromDate.format(this.momentDateFormat)} - ${toDate.format(this.momentDateFormat)}`);
 
       $('#logTimeStamp').daterangepicker({
         timePicker: true,
@@ -174,24 +169,23 @@ window.app = new Vue({
           format: self.momentDateFormat,
         },
       }, (startDate, endDate) => {
-        const start = self.convertToUTCTime(startDate);
-        const end = self.convertToUTCTime(endDate);
         self.searchData.startDate = startDate;
         self.searchData.endDate = endDate;
-        self.searchData.startTimeStamp = start.format(self.momentDateFormat);
-        self.searchData.endTimeStamp = end.format(self.momentDateFormat);
-        $('#logTimeStamp').val(`${start.format(self.momentDateFormat)} - ${end.format(self.momentDateFormat)}`);
+        $('#logTimeStamp').val(`${startDate.format(self.momentDateFormat)} - ${endDate.format(self.momentDateFormat)}`);
       });
 
       $('#logTimeStamp').on('apply.daterangepicker', function (ev, picker) {
-        const start = self.convertToUTCTime(picker.startDate);
-        const end = self.convertToUTCTime(picker.endDate);
         self.searchData.startDate = picker.startDate;
         self.searchData.endDate = picker.endDate;
-        self.searchData.startTimeStamp = start.format(self.momentDateFormat);
-        self.searchData.endTimeStamp = end.format(self.momentDateFormat);
-        $(this).val(`${start.format(self.momentDateFormat)} - ${end.format(self.momentDateFormat)}`);
+        $(this).val(`${picker.startDate.format(self.momentDateFormat)} - ${picker.endDate.format(self.momentDateFormat)}`);
       });
+    },
+
+    createDateParam() {
+      const start = this.convertToUTCTime(this.searchData.startDate);
+      const end = this.convertToUTCTime(this.searchData.endDate);
+      this.searchData.startTimeStamp = start.format(this.momentDateFormat);
+      this.searchData.endTimeStamp = end.format(this.momentDateFormat);
     },
 
     initValidator() {
