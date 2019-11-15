@@ -104,7 +104,7 @@ window.app = new Vue({
       }
 
       if (offset !== '' && offset !== null) {
-        arrQuery.push(`offset=${offset}`);
+        arrQuery.push(`offset=${offset - 1}`);
       }
 
       data.querystring = arrQuery.length === 0 ? '' : arrQuery.join('&');
@@ -168,11 +168,8 @@ window.app = new Vue({
 
     validateNumber(event, field) {
       const inputText = event.target.value;
-      if (inputText === '') {
+      if (inputText === '' || inputText === '0') {
         this.searchData[field] = null;
-      }
-      if (inputText === '00') {
-        this.searchData[field] = 0;
       }
     },
   },

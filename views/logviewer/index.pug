@@ -43,11 +43,11 @@ block content
                     span
                       | From &nbsp
                     .custom-control-inline
-                      input.form-control(type='number' name="offsetInputText" min="0" v-model="searchData.offset" @input="validateNumber($event, 'offset')")
+                      input.form-control(type='number' name="offsetInputText" min="1" v-model="searchData.offset" @input="validateNumber($event, 'offset')")
                     span
                       | Length &nbsp
                     .custom-control-inline
-                      input.form-control(type='number' name="limitInputText" min="0" v-model="searchData.limit" @input="validateNumber($event, 'limit')")
+                      input.form-control(type='number' name="limitInputText" min="1" v-model="searchData.limit" @input="validateNumber($event, 'limit')")
                     
       .col-10.border.rounded.pt-2.mb-2.data-section.d-none
         .text-nowrap.text-center(v-if="logData.length == 0")
