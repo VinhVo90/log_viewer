@@ -10,10 +10,13 @@ window.app = new Vue({
       searchData: {
         processId: '',
         emitterId: '',
+        startDate: null,
+        endDate: null,
         startTimeStamp: null,
         endTimeStamp: null,
         selectLogLevel: [],
         selectSearchOrder: [],
+        selectTimeZone: null,
         timeStampOrder: '',
         limit: null,
         offset: null,
@@ -25,6 +28,39 @@ window.app = new Vue({
         { code: 'info', label: 'INFO' },
         { code: 'error', label: 'ERROR' },
         { code: 'fatal', label: 'FATAL' },
+      ],
+      timeZoneArr: [
+        { code: 0, label: 'UTC, GMT' },
+        { code: 1, label: 'ECT, GMT+1:00' },
+        { code: 2, label: 'EET, GMT+2:00' },
+        { code: 2, label: 'ART, GMT+2:00' },
+        { code: 3, label: 'EAT, GMT+3:00' },
+        { code: 3.5, label: 'MET, GMT+3:30' },
+        { code: 4, label: 'NET, GMT+4:00' },
+        { code: 5, label: 'PLT, GMT+5:00' },
+        { code: 5.5, label: 'IST, GMT+5:30' },
+        { code: 6, label: 'BST, GMT+6:00' },
+        { code: 7, label: 'VST, GMT+7:00' },
+        { code: 8, label: 'CTT, GMT+8:00' },
+        { code: 9, label: 'KST,JST, GMT+9:00' },
+        { code: 9.5, label: 'ACT, GMT+9:30' },
+        { code: 10, label: 'AET, GMT+10:00' },
+        { code: 11, label: 'SST, GMT+11:00' },
+        { code: 12, label: 'NST, GMT+12:00' },
+        { code: -11, label: 'MIT, GMT-11:00' },
+        { code: -10, label: 'HST, GMT-10:00' },
+        { code: -9, label: 'AST, GMT-9:00' },
+        { code: -8, label: 'PST, GMT-8:00' },
+        { code: -7, label: 'PNT, GMT-7:00' },
+        { code: -7, label: 'MST, GMT-7:00' },
+        { code: -6, label: 'CST, GMT-6:00' },
+        { code: -5, label: 'EST, GMT-5:00' },
+        { code: -5, label: 'IET, GMT-5:00' },
+        { code: -4, label: 'PRT, GMT-4:00' },
+        { code: -3.5, label: 'CNT, GMT-3:30' },
+        { code: -3, label: 'AGT, GMT-3:00' },
+        { code: -3, label: 'BET, GMT-3:00' },
+        { code: -1, label: 'CAT, GMT-1:00' },
       ],
       searchOrderArr: [
         { code: 'timestamp', label: 'Time Stamp' },
@@ -51,6 +87,14 @@ window.app = new Vue({
       setTimeout(() => {
         this.waiting = false;
       }, 30000);
+    },
+
+    onUpdateUTCTime() {
+      const start = this.convertToUTCTime(this.searchData.startDate);
+      const end = this.convertToUTCTime(this.searchData.endDate);
+      this.searchData.startTimeStamp = start.format(this.momentDateFormat);
+      this.searchData.endTimeStamp = end.format(this.momentDateFormat);
+      $('#logTimeStamp').val(`${start.format(this.momentDateFormat)} - ${end.format(this.momentDateFormat)}`);
     },
 
     classObject(item) {
@@ -113,11 +157,18 @@ window.app = new Vue({
 
     initTimeEvent() {
       const self = this;
+      const fromDate = moment(new Date());
+      const toDate = fromDate.clone().subtract(1, 'day');
+      self.searchData.startDate = fromDate;
+      self.searchData.endDate = toDate;
+      self.onUpdateUTCTime();
+
       $('#logTimeStamp').daterangepicker({
         timePicker: true,
         timePickerSeconds: true,
         timePicker24Hour: true,
         autoUpdateInput: false,
+        cancelButtonClasses: 'd-none',
         format: self.momentDateFormat,
         locale: {
           format: self.momentDateFormat,
@@ -125,6 +176,8 @@ window.app = new Vue({
       }, (startDate, endDate) => {
         const start = self.convertToUTCTime(startDate);
         const end = self.convertToUTCTime(endDate);
+        self.searchData.startDate = startDate;
+        self.searchData.endDate = endDate;
         self.searchData.startTimeStamp = start.format(self.momentDateFormat);
         self.searchData.endTimeStamp = end.format(self.momentDateFormat);
         $('#logTimeStamp').val(`${start.format(self.momentDateFormat)} - ${end.format(self.momentDateFormat)}`);
@@ -133,15 +186,11 @@ window.app = new Vue({
       $('#logTimeStamp').on('apply.daterangepicker', function (ev, picker) {
         const start = self.convertToUTCTime(picker.startDate);
         const end = self.convertToUTCTime(picker.endDate);
+        self.searchData.startDate = picker.startDate;
+        self.searchData.endDate = picker.endDate;
         self.searchData.startTimeStamp = start.format(self.momentDateFormat);
         self.searchData.endTimeStamp = end.format(self.momentDateFormat);
         $(this).val(`${start.format(self.momentDateFormat)} - ${end.format(self.momentDateFormat)}`);
-      });
-
-      $('#logTimeStamp').on('cancel.daterangepicker', function () {
-        $(this).val('');
-        self.searchData.startTimeStamp = null;
-        self.searchData.endTimeStamp = null;
       });
     },
 
@@ -163,7 +212,12 @@ window.app = new Vue({
     },
 
     convertToUTCTime(date) {
-      return moment(date.valueOf() + (new Date()).getTimezoneOffset() * 60000);
+      const { selectTimeZone } = this.searchData;
+      if (selectTimeZone == null) {
+        return moment(date.valueOf() + (new Date()).getTimezoneOffset() * 60000);
+      }
+      const timeZone = selectTimeZone.code;
+      return moment(date.valueOf() + (-1) * timeZone * 60 * 60000);
     },
 
     validateNumber(event, field) {

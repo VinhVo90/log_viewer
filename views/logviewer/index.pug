@@ -24,12 +24,17 @@ block content
                   input#emitterIdText.form-control(type='text' name='emitterIdText' placeholder='Emitter Id', v-model='searchData.emitterId')
               .form-row
                 .form-group.col-md-6
-                  label Time Range
-                  .input-group
-                    .input-group-prepend
-                      span.input-group-text
-                        i.fa.fa-calendar
-                    input#logTimeStamp.form-control.float-right(type='text', maxLength='46', readonly, style="background : white")
+                  .form-row
+                    .col-md-6
+                      label Time Range
+                      .input-group
+                        .input-group-prepend
+                          span.input-group-text
+                            i.fa.fa-calendar
+                        input#logTimeStamp.form-control.float-right(type='text', name='logTimeStamp', maxLength='46', readonly, style="background : white")
+                    .col-md-6
+                      label Time Zone
+                      v-select(:id="'timeZoneOptions'" v-model='searchData.selectTimeZone' :options='timeZoneArr' :multiple='false' :reduce='item => item.code' label='label' @input="onUpdateUTCTime")
                 .form-group.col-md-6
                   label(for='logLevelOptions') Log Level
                   v-select(:id="'logLevelOptions'" v-model='searchData.selectLogLevel' :options='logLevelArr' :multiple='true' :reduce='item => item.code' label='label' :close-on-select='false')
