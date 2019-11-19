@@ -18,10 +18,10 @@ block content
               .form-row
                 .form-group.col-md-6
                   label(for='processIdText') Process Id
-                  input#processIdText.form-control(type='text' name='processIdText' placeholder='Process Id', v-model='searchData.processId')
+                  input#processIdText.form-control(type='text' name='processIdText' placeholder='Process Id', v-model='searchData.processId', v-on:keyup.enter="onBtnSearchClick")
                 .form-group.col-md-6
                   label(for='emitterIdText') Emitter Id
-                  input#emitterIdText.form-control(type='text' name='emitterIdText' placeholder='Emitter Id', v-model='searchData.emitterId')
+                  input#emitterIdText.form-control(type='text' name='emitterIdText' placeholder='Emitter Id', v-model='searchData.emitterId', v-on:keyup.enter="onBtnSearchClick")
               .form-row
                 .form-group.col-md-6
                   .form-row
