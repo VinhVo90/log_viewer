@@ -183,8 +183,8 @@ window.app = new Vue({
     },
 
     createDateParam() {
-      const start = this.convertToUTCTime(this.searchData.startDate);
-      const end = this.convertToUTCTime(this.searchData.endDate);
+      const start = this.convertToUTCTime(this.searchData.startDate.valueOf());
+      const end = this.convertToUTCTime(this.searchData.endDate.valueOf());
       this.searchData.startTimeStamp = start.format(this.momentDateFormat);
       this.searchData.endTimeStamp = end.format(this.momentDateFormat);
     },
@@ -206,20 +206,28 @@ window.app = new Vue({
       });
     },
 
-    convertToUTCTime(date, toTimeZone) {
+    convertToUTCTime(time) {
       const { selectTimeZone } = this.searchData;
       if (selectTimeZone == null) {
-        return moment(date.valueOf() + (new Date()).getTimezoneOffset() * 60000);
+        return moment(time + (new Date()).getTimezoneOffset() * 60000);
       }
       const timeZone = selectTimeZone.code;
-      const factor = toTimeZone ? 1 : -1;
-      return moment(date.valueOf() + factor * timeZone * 60 * 60000);
+      return moment(time + (-1) * timeZone * 60 * 60000);
+    },
+
+    convertToLocalTime(time) {
+      const { selectTimeZone } = this.searchData;
+      if (selectTimeZone == null) {
+        return moment(time).utc();
+      }
+      const timeZone = selectTimeZone.code;
+      return moment(time + timeZone * 60 * 60000).utc();
     },
 
     inputTimestamp(timestamp) {
       if (timestamp !== '') {
-        return this.convertToUTCTime(moment(timestamp,
-          this.timestampFormat), true).utc().format(this.momentDateFormat);
+        return this.convertToLocalTime(moment(timestamp,
+          this.timestampFormat).valueOf()).format(this.momentDateFormat);
       }
       return '';
     },
