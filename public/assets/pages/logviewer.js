@@ -219,7 +219,7 @@ window.app = new Vue({
     inputTimestamp(timestamp) {
       if (timestamp !== '') {
         return this.convertToUTCTime(moment(timestamp,
-          this.timestampFormat), true).format(this.momentDateFormat);
+          this.timestampFormat), true).utc().format(this.momentDateFormat);
       }
       return '';
     },
