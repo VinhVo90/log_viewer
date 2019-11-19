@@ -6,6 +6,7 @@ window.app = new Vue({
     return {
       waiting: false,
       datePickerFormat: 'dd/MM/yyyy',
+      timestampFormat: 'YYYY-MM-DDTHH:mm:ss.SSSZ',
       momentDateFormat: 'YYYY-MM-DD HH:mm:ss',
       searchData: {
         processId: '',
@@ -205,13 +206,22 @@ window.app = new Vue({
       });
     },
 
-    convertToUTCTime(date) {
+    convertToUTCTime(date, toTimeZone) {
       const { selectTimeZone } = this.searchData;
       if (selectTimeZone == null) {
         return moment(date.valueOf() + (new Date()).getTimezoneOffset() * 60000);
       }
       const timeZone = selectTimeZone.code;
-      return moment(date.valueOf() + (-1) * timeZone * 60 * 60000);
+      const factor = toTimeZone ? 1 : -1;
+      return moment(date.valueOf() + factor * timeZone * 60 * 60000);
+    },
+
+    inputTimestamp(timestamp) {
+      if (timestamp !== '') {
+        return this.convertToUTCTime(moment(timestamp,
+          this.timestampFormat), true).format(this.momentDateFormat);
+      }
+      return '';
     },
 
     validateNumber(event, field) {
