@@ -9,10 +9,6 @@ block content
     .row.justify-content-center.pt-2
       .col-10.border.rounded.pt-2.mb-2
         .row
-          .col-12.text-right
-            .btn-group
-              button.btn.btn-primary(type='button' data-toggle='button' aria-pressed='false' autocomplete='off', @click="onBtnSearchClick") Search
-        .row
           .col-12
             form#logSearchForm
               .form-row
@@ -41,7 +37,7 @@ block content
               .form-row
                 .form-group.col-md-6
                   label(for='processIdText') Order By
-                  v-select(:id="'searchOrderOptions'" v-model='searchData.selectSearchOrder' :options='searchOrderArr' :multiple='true' :reduce='item => item.code' label='label' :close-on-select='false')
+                  v-select(:id="'searchOrderOptions'" v-model='searchData.selectSearchOrder' :options='searchOrderArr' :multiple='false' :reduce='item => item.code' label='label')
                 .form-group.col-md-6
                   label(for='processIdText') Record Range
                   div
@@ -53,15 +49,17 @@ block content
                       | Length &nbsp
                     .custom-control-inline
                       input.form-control(type='number' name="limitInputText" min="1" v-model="searchData.limit" @input="validateNumber($event, 'limit')")
-                    
+        .row
+          .col-12.text-right.mb-2
+            .btn-group
+              button.btn.btn-primary(type='button' data-toggle='button' aria-pressed='false' autocomplete='off', @click="onBtnSearchClick") Search              
       .col-10.border.rounded.pt-2.mb-2.data-section.d-none
         .text-nowrap.text-center(v-if="logData.length == 0")
           | There is no data
         .card.text-white.mb-3(v-for="(item, idx) in logData" v-bind:class="classObject(item)")
           .card-body
-            p.card-text Log Level : {{item.log_level}}
-            p.card-text Process Code : {{item.process_code}}
-            p.card-text Log Message : {{item.message}}
-            p.card-text Timestamp : {{inputTimestamp(item.timestamp)}}
+            p.card-text [{{inputTimestamp(item.timestamp)}}][{{item.log_level.toUpperCase()}}]
+            p.card-text [ProcessCode]: {{item.process_code}}
+            p.card-text [Message]: {{item.message}}
             
 block scripts

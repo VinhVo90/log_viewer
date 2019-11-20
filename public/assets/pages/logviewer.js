@@ -16,7 +16,7 @@ window.app = new Vue({
         startTimeStamp: null,
         endTimeStamp: null,
         selectLogLevel: [],
-        selectSearchOrder: [],
+        selectSearchOrder: null,
         selectTimeZone: null,
         timeStampOrder: '',
         limit: null,
@@ -64,7 +64,8 @@ window.app = new Vue({
         { code: -1, label: 'CAT, GMT-1:00' },
       ],
       searchOrderArr: [
-        { code: 'timestamp', label: 'Time Stamp' },
+        { code: 'timestamp asc', label: 'Time Asc' },
+        { code: 'timestamp desc', label: 'Time Desc' },
       ],
     };
   },
@@ -121,7 +122,6 @@ window.app = new Vue({
       arrFilter.push(`timestamp between '${startTimeStamp}' and '${endTimeStamp}'`);
 
       const arrLogLevel = _.map(selectLogLevel, (item) => `log_level = '${item.code}'`);
-      const arrLogSearchOrder = _.map(selectSearchOrder, (item) => `orderBy=${item.code}`);
 
       if (arrLogLevel.length > 0) {
         arrFilter.push(arrLogLevel.join(' and '));
@@ -131,8 +131,8 @@ window.app = new Vue({
         arrQuery.push(`filter=${arrFilter.join(' and ')}`);
       }
 
-      if (arrLogSearchOrder.length > 0) {
-        arrQuery.push(arrLogSearchOrder.join('&'));
+      if (selectSearchOrder !== null) {
+        arrQuery.push(`orderBy=${selectSearchOrder.code}`);
       }
 
       if (limit !== '' && limit !== null) {
