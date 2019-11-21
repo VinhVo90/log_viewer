@@ -2,6 +2,9 @@ extends ../layout
 
 block styles
   style(type='text/css').
+    #timeZoneOptions.v-select .clear {
+      visibility: hidden;
+    }
 
 block content
   include ../partials/spinner
@@ -41,13 +44,11 @@ block content
                 .form-group.col-md-6
                   label(for='processIdText') Record Range
                   div
-                    span
-                      | From &nbsp
                     .custom-control-inline
+                      | From &nbsp &nbsp &nbsp
                       input.form-control(type='number' name="offsetInputText" min="1" v-model="searchData.offset" @input="validateNumber($event, 'offset')")
-                    span
-                      | Length &nbsp
                     .custom-control-inline
+                      | Length &nbsp &nbsp &nbsp
                       input.form-control(type='number' name="limitInputText" min="1" v-model="searchData.limit" @input="validateNumber($event, 'limit')")
         .row
           .col-12.text-right.mb-2
