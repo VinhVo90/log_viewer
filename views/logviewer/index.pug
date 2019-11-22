@@ -1,10 +1,6 @@
 extends ../layout
 
 block styles
-  style(type='text/css').
-    #timeZoneOptions.v-select .clear {
-      visibility: hidden;
-    }
 
 block content
   include ../partials/spinner
@@ -33,14 +29,17 @@ block content
                         input#logTimeStamp.form-control.float-right(type='text', name='logTimeStamp', maxLength='46', readonly, style="background : white")
                     .col-md-6
                       label Time Zone
-                      v-select(:id="'timeZoneOptions'" v-model='searchData.selectTimeZone' :options='timeZoneArr' :multiple='false' :reduce='item => item.code' label='label')
+                      select.browser-default.custom-select(v-model='searchData.selectTimeZone')
+                        option(v-for="(item, index) in timeZoneArr" :value="item") {{item.label}}
                 .form-group.col-md-6
                   label(for='logLevelOptions') Log Level
-                  v-select(:id="'logLevelOptions'" v-model='searchData.selectLogLevel' :options='logLevelArr' :multiple='true' :reduce='item => item.code' label='label' :close-on-select='false')
+                  select.browser-default.custom-select(v-model='searchData.selectLogLevel')
+                      option(v-for="(item, index) in logLevelArr" :value="item") {{item.label}}
               .form-row
                 .form-group.col-md-6
                   label(for='processIdText') Order By
-                  v-select(:id="'searchOrderOptions'" v-model='searchData.selectSearchOrder' :options='searchOrderArr' :multiple='false' :reduce='item => item.code' label='label')
+                  select.browser-default.custom-select(v-model='searchData.selectSearchOrder')
+                      option(v-for="(item, index) in searchOrderArr" :value="item") {{item.label}}
                 .form-group.col-md-6
                   label(for='processIdText') Record Range
                   div

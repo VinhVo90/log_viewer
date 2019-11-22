@@ -15,15 +15,15 @@ window.app = new Vue({
         endDate: null,
         startTimeStamp: null,
         endTimeStamp: null,
-        selectLogLevel: [],
-        selectSearchOrder: null,
-        selectTimeZone: null,
-        timeStampOrder: '',
+        selectLogLevel: { code: '', label: '' },
+        selectSearchOrder: { code: '', label: '' },
+        selectTimeZone: { code: '', label: '' },
         limit: null,
         offset: null,
       },
       logData: [],
       logLevelArr: [
+        { code: '', label: '' },
         { code: 'debug', label: 'DEBUG' },
         { code: 'warn', label: 'WARNING' },
         { code: 'info', label: 'INFO' },
@@ -64,6 +64,7 @@ window.app = new Vue({
         { code: -1, label: 'CAT, GMT-1:00' },
       ],
       searchOrderArr: [
+        { code: '', label: '' },
         { code: 'timestamp asc', label: 'Time Asc' },
         { code: 'timestamp desc', label: 'Time Desc' },
       ],
@@ -121,17 +122,15 @@ window.app = new Vue({
 
       arrFilter.push(`timestamp between '${startTimeStamp}' and '${endTimeStamp}'`);
 
-      const arrLogLevel = _.map(selectLogLevel, (item) => `log_level = '${item.code}'`);
-
-      if (arrLogLevel.length > 0) {
-        arrFilter.push(arrLogLevel.join(' and '));
+      if (selectLogLevel.code !== null && selectLogLevel.code !== '') {
+        arrFilter.push(`log_level = '${selectLogLevel.code}'`);
       }
 
       if (arrFilter.length > 0) {
         arrQuery.push(`filter=${arrFilter.join(' and ')}`);
       }
 
-      if (selectSearchOrder !== null) {
+      if (selectSearchOrder.code !== null && selectSearchOrder.code !== '') {
         arrQuery.push(`orderBy=${selectSearchOrder.code}`);
       }
 
@@ -207,20 +206,12 @@ window.app = new Vue({
     },
 
     convertToUTCTime(time) {
-      const { selectTimeZone } = this.searchData;
-      if (selectTimeZone == null) {
-        return moment(time + (new Date()).getTimezoneOffset() * 60000);
-      }
-      const timeZone = selectTimeZone.code;
+      const { code: timeZone } = this.searchData.selectTimeZone;
       return moment(time + (-1) * timeZone * 60 * 60000);
     },
 
     convertToLocalTime(time) {
-      const { selectTimeZone } = this.searchData;
-      if (selectTimeZone == null) {
-        return moment(time).utc();
-      }
-      const timeZone = selectTimeZone.code;
+      const { code: timeZone } = this.searchData.selectTimeZone;
       return moment(time + timeZone * 60 * 60000).utc();
     },
 
