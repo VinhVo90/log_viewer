@@ -9,7 +9,7 @@ module.exports = {
     "SharedArrayBuffer": "readonly",
     "$": "readonly",
     "Vue": "readonly",
-    "VueSelect": "readonly",
+    "VueMultiselect": "readonly",
     "vuejsDatepicker": "readonly",
     "_": "readonly",
     "axios": "readonly",

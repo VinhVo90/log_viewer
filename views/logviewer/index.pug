@@ -33,14 +33,14 @@ block content
                         input#logTimeStamp.form-control.float-right(type='text', name='logTimeStamp', maxLength='46', readonly, style="background : white")
                     .col-md-6
                       label Time Zone
-                      v-select(:id="'timeZoneOptions'" v-model='searchData.selectTimeZone' :options='timeZoneArr' :multiple='false' :reduce='item => item.code' label='label')
+                      multiselect(:id="'timeZoneOptions'" v-model='searchData.selectTimeZone' :options='timeZoneArr' :multiple='false' :reduce='item => item.code' label='label')
                 .form-group.col-md-6
                   label(for='logLevelOptions') Log Level
-                  v-select(:id="'logLevelOptions'" v-model='searchData.selectLogLevel' :options='logLevelArr' :multiple='true' :reduce='item => item.code' label='label' :close-on-select='false')
+                  multiselect(v-model='searchData.selectLogLevel' track-by="code" :options='logLevelArr' :multiple='true' label='label' key='code' :close-on-select='false')
               .form-row
                 .form-group.col-md-6
                   label(for='processIdText') Order By
-                  v-select(:id="'searchOrderOptions'" v-model='searchData.selectSearchOrder' :options='searchOrderArr' :multiple='false' :reduce='item => item.code' label='label')
+                  multiselect(:id="'searchOrderOptions'" v-model='searchData.selectSearchOrder' :options='searchOrderArr' :multiple='false' label='label')
                 .form-group.col-md-6
                   label(for='processIdText') Record Range
                   div

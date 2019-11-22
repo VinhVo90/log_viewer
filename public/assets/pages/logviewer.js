@@ -1,4 +1,4 @@
-Vue.component('v-select', VueSelect.VueSelect);
+Vue.component('multiselect', VueMultiselect.Multiselect);
 
 window.app = new Vue({
   el: '#app',
