@@ -18,7 +18,6 @@ window.app = new Vue({
         selectLogLevel: [],
         selectSearchOrder: null,
         selectTimeZone: null,
-        timeStampOrder: '',
         limit: null,
         offset: null,
       },
@@ -207,20 +206,12 @@ window.app = new Vue({
     },
 
     convertToUTCTime(time) {
-      const { selectTimeZone } = this.searchData;
-      if (selectTimeZone == null) {
-        return moment(time + (new Date()).getTimezoneOffset() * 60000);
-      }
-      const timeZone = selectTimeZone.code;
+      const { code: timeZone } = this.searchData.selectTimeZone;
       return moment(time + (-1) * timeZone * 60 * 60000);
     },
 
     convertToLocalTime(time) {
-      const { selectTimeZone } = this.searchData;
-      if (selectTimeZone == null) {
-        return moment(time).utc();
-      }
-      const timeZone = selectTimeZone.code;
+      const { code: timeZone } = this.searchData.selectTimeZone;
       return moment(time + timeZone * 60 * 60000).utc();
     },
 
