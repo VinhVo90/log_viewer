@@ -21,6 +21,10 @@ window.app = new Vue({
         limit: null,
         offset: null,
       },
+      formValidation: {
+        timeZoneValid: true,
+        timeZoneMessage: 'This select is required!',
+      },
       logData: [],
       logLevelArr: [
         { code: 'debug', label: 'DEBUG' },
@@ -75,7 +79,8 @@ window.app = new Vue({
 
   methods: {
     onBtnSearchClick() {
-      if ($('#logSearchForm').valid()) {
+      this.validateTimeZone();
+      if ($('#logSearchForm').valid() && this.formValidation.timeZoneValid) {
         $('.data-section').removeClass('d-none');
         this.waiting = true;
         this.createDateParam();
@@ -89,6 +94,10 @@ window.app = new Vue({
       setTimeout(() => {
         this.waiting = false;
       }, 30000);
+    },
+
+    onSelectTimezone(selectOption) {
+      this.validateTimeZone(selectOption);
     },
 
     classObject(item) {
@@ -203,6 +212,11 @@ window.app = new Vue({
           },
         },
       });
+    },
+
+    validateTimeZone(timezone) {
+      const { selectTimeZone } = this.searchData;
+      this.formValidation.timeZoneValid = !!((typeof timezone !== 'undefined' || selectTimeZone !== null));
     },
 
     convertToUTCTime(time) {
