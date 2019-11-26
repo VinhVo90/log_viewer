@@ -21,6 +21,7 @@ window.app = new Vue({
         limit: null,
         offset: null,
       },
+      formErrorClass: 'form-input-error',
       logData: [],
       logLevelArr: [
         { code: 'debug', label: 'DEBUG' },
@@ -197,18 +198,31 @@ window.app = new Vue({
     },
 
     initValidator() {
+      const { formErrorClass } = this;
       $.validator.addMethod('onlyOne', function (value, element, param) {
-        return (!this.optional(element) && $(param[0]).is(':blank')) || (this.optional(element) && !$(param[0]).is(':blank'));
+        const inputId = `#${param[0]}`;
+        const isValid = (!this.optional(element) && $(inputId).is(':blank')) || (this.optional(element) && !$(inputId).is(':blank'));
+        if (isValid) {
+          $(element).removeClass(formErrorClass);
+          $(element).siblings(`.${formErrorClass}`).remove();
+          $(inputId).removeClass(formErrorClass);
+          $(inputId).siblings(`.${formErrorClass}`).remove();
+        } else {
+          $(inputId).addClass(formErrorClass);
+          $(inputId).siblings(`.${formErrorClass}`).remove();
+          $(`<label id="${param[0]}-error" class="form-input-error" for="${param[0]}">Please fill out only one of these fields</label>`).insertAfter(inputId);
+        }
+        return isValid;
       }, 'Please fill out only one of these fields');
 
       $('#logSearchForm').validate({
-        errorClass: 'form-input-error',
+        errorClass: formErrorClass,
         rules: {
           processIdText: {
-            onlyOne: ['#emitterIdText'],
+            onlyOne: ['emitterIdText'],
           },
           emitterIdText: {
-            onlyOne: ['#processIdText'],
+            onlyOne: ['processIdText'],
           },
         },
       });
