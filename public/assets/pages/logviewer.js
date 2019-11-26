@@ -15,7 +15,7 @@ window.app = new Vue({
         endDate: null,
         startTimeStamp: null,
         endTimeStamp: null,
-        selectLogLevel: [],
+        selectLogLevel: null,
         selectSearchOrder: null,
         selectTimeZone: null,
         limit: null,
@@ -100,6 +100,16 @@ window.app = new Vue({
       this.validateTimeZone(selectOption);
     },
 
+    onRemoveTimezone(selectOption) {
+      this.searchData.removeTimeZone = selectOption;
+    },
+
+    onInputTimezone(value) {
+      if (value === null) {
+        this.searchData.selectTimeZone = this.searchData.removeTimeZone;
+      }
+    },
+
     classObject(item) {
       return {
         'bg-primary': item.log_level === 'debug',
@@ -129,10 +139,8 @@ window.app = new Vue({
 
       arrFilter.push(`timestamp between '${startTimeStamp}' and '${endTimeStamp}'`);
 
-      const arrLogLevel = _.map(selectLogLevel, (item) => `log_level = '${item.code}'`);
-
-      if (arrLogLevel.length > 0) {
-        arrFilter.push(arrLogLevel.join(' and '));
+      if (selectLogLevel !== null) {
+        arrFilter.push(`log_level = '${selectLogLevel.code}'`);
       }
 
       if (arrFilter.length > 0) {
