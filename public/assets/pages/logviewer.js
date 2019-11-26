@@ -72,6 +72,13 @@ window.app = new Vue({
       ],
     };
   },
+
+  watch: {
+    'searchData.selectTimeZone': function () {
+      this.logData = this.formatLogData(this.logData);
+    },
+  },
+
   mounted() {
     this.initTimeEvent();
     this.initValidator();
@@ -79,6 +86,7 @@ window.app = new Vue({
 
   methods: {
     onBtnSearchClick() {
+      const self = this;
       if ($('#logSearchForm').valid()) {
         $('.data-section').removeClass('d-none');
         this.waiting = true;
@@ -86,7 +94,8 @@ window.app = new Vue({
         const data = this.createRequestParam();
         axios.post('/logviewer/get-log-data', data).then((response) => {
           this.waiting = false;
-          this.logData = response.data;
+          const dataArr = self.formatLogData(response.data);
+          this.logData = dataArr;
         });
       }
 
@@ -103,6 +112,17 @@ window.app = new Vue({
       if (value === null) {
         this.searchData.selectTimeZone = this.searchData.removeTimeZone;
       }
+    },
+
+    formatLogData(arr) {
+      const self = this;
+      const data = [];
+      arr.forEach((element) => {
+        const item = { ...element };
+        item.timestampDisplay = self.inputTimestamp(element.timestamp);
+        data.push(item);
+      });
+      return data;
     },
 
     classObject(item) {
