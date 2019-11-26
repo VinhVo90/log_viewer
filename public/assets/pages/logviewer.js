@@ -9,6 +9,8 @@ window.app = new Vue({
       timestampFormat: 'YYYY-MM-DDTHH:mm:ss.SSSZ',
       momentDateFormat: 'YYYY-MM-DD HH:mm:ss',
       searchData: {
+        userId: '',
+        processSetupId: '',
         processId: '',
         emitterId: '',
         startDate: null,
@@ -21,6 +23,7 @@ window.app = new Vue({
         limit: null,
         offset: null,
       },
+      arrSearchOption: ['userIdText', 'processSetupIdText', 'processIdText', 'emitterIdText'],
       formErrorClass: 'form-input-error',
       logData: [],
       logLevelArr: [
@@ -112,16 +115,29 @@ window.app = new Vue({
       };
     },
 
+    normalizeText(item) {
+      if (item === null) {
+        return '';
+      }
+      return item;
+    },
+
     createRequestParam() {
       const {
-        processId, emitterId, startTimeStamp, endTimeStamp,
+        userId, processSetupId, processId, emitterId, startTimeStamp, endTimeStamp,
         selectLogLevel, selectSearchOrder, limit, offset,
       } = this.searchData;
       const data = {};
       const arrQuery = [];
       const arrFilter = [];
 
-      if (processId !== '') {
+      if (userId !== '') {
+        data.searchUser = true;
+        data.userId = userId;
+      } else if (processSetupId !== '') {
+        data.searchProcessSetup = true;
+        data.processSetupId = processSetupId;
+      } else if (processId !== '') {
         data.searchProcess = true;
         data.processId = processId;
       } else {
@@ -198,32 +214,45 @@ window.app = new Vue({
     },
 
     initValidator() {
-      const { formErrorClass } = this;
+      const self = this;
+      const { formErrorClass } = self;
+
       $.validator.addMethod('onlyOne', function (value, element, param) {
-        const inputId = `#${param[0]}`;
-        const isValid = (!this.optional(element) && $(inputId).is(':blank')) || (this.optional(element) && !$(inputId).is(':blank'));
-        if (isValid) {
-          $(element).removeClass(formErrorClass);
-          $(element).siblings(`.${formErrorClass}`).remove();
-          $(inputId).removeClass(formErrorClass);
-          $(inputId).siblings(`.${formErrorClass}`).remove();
-        } else {
-          $(inputId).addClass(formErrorClass);
-          $(inputId).siblings(`.${formErrorClass}`).remove();
-          $(`<label id="${param[0]}-error" class="form-input-error" for="${param[0]}">Please fill out only one of these fields</label>`).insertAfter(inputId);
-        }
+        const hasValue = self.hasValueInput(param);
+        const isValid = (!this.optional(element) && !hasValue)
+                        || (this.optional(element) && hasValue);
+        self.clearError(self.arrSearchOption);
         return isValid;
       }, 'Please fill out only one of these fields');
+
+      const displayError = (field, message) => {
+        const input = $(`#${field}`);
+        input.removeClass(formErrorClass);
+        input.siblings(`.${formErrorClass}`).remove();
+        $(`<label id="${field}-error" class="form-input-error" for="${field}">${message}</label>`).insertAfter(input);
+      };
 
       $('#logSearchForm').validate({
         errorClass: formErrorClass,
         rules: {
+          userIdText: {
+            onlyOne: self.validArrSearch('userIdText'),
+          },
+          processSetupIdText: {
+            onlyOne: self.validArrSearch('processSetupIdText'),
+          },
           processIdText: {
-            onlyOne: ['emitterIdText'],
+            onlyOne: self.validArrSearch('processIdText'),
           },
           emitterIdText: {
-            onlyOne: ['processIdText'],
+            onlyOne: self.validArrSearch('emitterIdText'),
           },
+        },
+        showErrors(errorMap, errorList) {
+          for (let i = 0; i < errorList.length; i += 1) {
+            const { message } = errorList[i];
+            self.arrSearchOption.forEach((element) => displayError(element, message));
+          }
         },
       });
     },
@@ -250,6 +279,30 @@ window.app = new Vue({
       const inputText = event.target.value;
       if (inputText === '' || inputText === '0') {
         this.searchData[field] = null;
+      }
+    },
+
+    validArrSearch(input) {
+      return _.filter(this.arrSearchOption, (item) => item !== input);
+    },
+
+    hasValueInput(arrInput) {
+      for (let i = 0; i < arrInput.length; i += 1) {
+        const input = arrInput[i];
+        if (!$(`[name=${input}]`).is(':blank')) {
+          return true;
+        }
+      }
+      return false;
+    },
+
+    clearError(arrInput) {
+      const { formErrorClass } = this;
+      for (let i = 0; i < arrInput.length; i += 1) {
+        const input = arrInput[i];
+        const element = $(`[name=${input}]`);
+        element.removeClass(formErrorClass);
+        element.siblings(`.${formErrorClass}`).remove();
       }
     },
   },

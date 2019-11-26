@@ -16,6 +16,13 @@ block content
             form#logSearchForm
               .form-row
                 .form-group.col-md-6
+                  label(for='userIdText') User Id
+                  input#userIdText.form-control(type='text' name='userIdText' placeholder='User Id', v-model='searchData.userId', v-on:keyup.enter="onBtnSearchClick")
+                .form-group.col-md-6
+                  label(for='processSetupIdText') Process Setup Id
+                  input#processSetupIdText.form-control(type='text' name='processSetupIdText' placeholder='Process Setup Id', v-model='searchData.processSetupId', v-on:keyup.enter="onBtnSearchClick")
+              .form-row
+                .form-group.col-md-6
                   label(for='processIdText') Process Id
                   input#processIdText.form-control(type='text' name='processIdText' placeholder='Process Id', v-model='searchData.processId', v-on:keyup.enter="onBtnSearchClick")
                 .form-group.col-md-6
@@ -61,6 +68,9 @@ block content
           .card-body
             p.card-text [{{inputTimestamp(item.timestamp)}}][{{item.log_level.toUpperCase()}}]
             p.card-text [ProcessCode]: {{item.process_code}}
-            p.card-text [Message]: {{item.message}}
+            p.card-text [UserId]: {{normalizeText(item.user_id)}}
+            p.card-text [GroupId]: {{normalizeText(item.group_id)}}
+            p.card-text [ProcessSetupId]: {{normalizeText(item.process_setup_id)}}
+            p.card-text [TransactionId]: {{normalizeText(item.transaction_id)}}
             
 block scripts

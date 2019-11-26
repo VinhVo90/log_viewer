@@ -4,13 +4,18 @@ const CONSTANT = require('../configs/constants');
 const getLogData = async (ctx) => {
   const searchData = ctx.request.body;
   const {
-    searchProcess, processId, emitterId, querystring,
+    searchUser, searchProcessSetup, searchProcess, searchEmitter, userId,
+    processSetupId, processId, emitterId, querystring,
   } = searchData;
   let url = '';
 
-  if (searchProcess) {
+  if (searchUser) {
+    url = `${CONSTANT.API_SERVER}/logs/users/${userId}`;
+  } else if (searchProcessSetup) {
+    url = `${CONSTANT.API_SERVER}/logs/process-setups/${processSetupId}`;
+  } else if (searchProcess) {
     url = `${CONSTANT.API_SERVER}/logs/processes/${processId}`;
-  } else {
+  } else if (searchEmitter) {
     url = `${CONSTANT.API_SERVER}/logs/emitters/${emitterId}`;
   }
 
