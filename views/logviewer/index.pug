@@ -1,6 +1,10 @@
 extends ../layout
 
 block styles
+  style(type='text/css').
+    .form-input-error {
+      color : #f36a0c;
+    }
 
 block content
   include ../partials/spinner
@@ -29,8 +33,7 @@ block content
                         input#logTimeStamp.form-control.float-right(type='text', name='logTimeStamp', maxLength='46', readonly, style="background : white")
                     .col-md-6
                       label Time Zone
-                      multiselect(:id="'timeZoneOptions'" v-model='searchData.selectTimeZone' @select="onSelectTimezone" @input="onInputTimezone" @remove="onRemoveTimezone" :options='timeZoneArr' :multiple='false' :reduce='item => item.code' label='label')
-                      span(v-show='!formValidation.timeZoneValid' v-html="formValidation.timeZoneMessage")
+                      multiselect(:id="'timeZoneOptions'" v-model='searchData.selectTimeZone' @input="onInputTimezone" @remove="onRemoveTimezone" :options='timeZoneArr' :multiple='false' :reduce='item => item.code' label='label')
                 .form-group.col-md-6
                   label(for='logLevelOptions') Log Level
                   multiselect(v-model='searchData.selectLogLevel' track-by="code" :options='logLevelArr' :multiple='false' label='label' key='code')
