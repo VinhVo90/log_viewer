@@ -107,11 +107,11 @@ window.app = new Vue({
 
     classObject(item) {
       return {
-        'bg-primary': item.log_level === 'debug',
-        'bg-success': item.log_level === 'info',
-        'bg-warning': item.log_level === 'warn',
-        'bg-danger': item.log_level === 'error',
-        'bg-dark': item.log_level === 'fail',
+        'bg-primary': item.log_level.toLowerCase() === 'debug',
+        'bg-success': item.log_level.toLowerCase() === 'info',
+        'bg-warning': item.log_level.toLowerCase() === 'warn',
+        'bg-danger': item.log_level.toLowerCase() === 'error',
+        'bg-dark': item.log_level.toLowerCase() === 'fail',
       };
     },
 
