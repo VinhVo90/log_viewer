@@ -23,6 +23,7 @@ module.exports = {
     "max-classes-per-file": "off",
     "no-bitwise": "off",
     "no-underscore-dangle": "off",
+    "prefer-object-spread": "off",
     "linebreak-style": ["error", "windows"]
   }
 }

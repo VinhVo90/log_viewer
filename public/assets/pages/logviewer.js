@@ -118,7 +118,7 @@ window.app = new Vue({
       const self = this;
       const data = [];
       arr.forEach((element) => {
-        const item = { ...element };
+        const item = Object.assign({}, element);
         item.timestampDisplay = self.inputTimestamp(element.timestamp);
         data.push(item);
       });
