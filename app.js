@@ -4,7 +4,6 @@ const koastatic = require('koa-static');
 const bodyParser = require('koa-body');
 const path = require('path');
 const router = require('./routes/index.js');
-const db = require('./models');
 const sass = require('./configs/sass.js');
 
 const app = new Koa();
@@ -43,10 +42,7 @@ app.use(sass);
 app.use(koastatic(`${__dirname}/public`));
 app.use(router.routes());
 
-db.sequelize.sync()
-  .then(() => {
-    app.listen(3003, () => {
-      console.log('  App is running at https://localhost:3003');
-      console.log('  Press CTRL-C to stop\n');
-    });
-  });
+app.listen(3003, () => {
+  console.log('  App is running at https://localhost:3003');
+  console.log('  Press CTRL-C to stop\n');
+});
