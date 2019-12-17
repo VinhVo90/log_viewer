@@ -24,6 +24,7 @@ module.exports = {
     "no-bitwise": "off",
     "no-underscore-dangle": "off",
     "prefer-object-spread": "off",
-    "linebreak-style": ["error", "windows"]
+    "linebreak-style": ["error", "windows"],
+    "class-methods-use-this": "off"
   }
 }
